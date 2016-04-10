@@ -1,0 +1,61 @@
+
+
+
+.msb{position:relative;overflow:hidden;position:fixed;z-index: 110;top:0;left:0;width:100%;height:100%;background: rgba(#000,0.3);display: none;
+  &-container{position: absolute;z-index: 101;overflow-y: auto;background: #f9f9f9;padding:10px 10px 10px 10px;}
+  &-close{width:60px;height:60px;border:0;background:rgba(#000,0.03);cursor:pointer;display: inline-block;float:right;touch-action:manipulation;outline:0;font-size: 0;line-height: 0;
+    &:before{content:'';width:55%;margin-top:0;margin-left:auto;margin-right:auto;height:1px;background-color:#000;display:block;transform:rotate(0deg);display: block}
+    &:after{content:'';width:55%;margin-top:0;margin-left:auto;margin-right:auto;margin-top:-1px;height:1px;background-color:#000;display:block;transform:rotate(45deg);display: block;}
+    &:hover{
+      &:before{width:80%;}
+      &:after{width:80%;}
+    }
+  }
+  &-content{clear:both;
+    & > .msb-item:first-child{border-top:1px solid #e2dede;}
+    & > .msb-collapse{margin:0 -10px;}
+  }
+  &-item{display:block;text-align:left;margin:0 -10px;padding:0 20px;font-size:1rem;line-height: 60px;height:60px;overflow:hidden;text-decoration: none;transition: all  200ms ease-out;cursor: pointer;border-bottom: 1px solid #e2dede;color:#555;box-sizing: border-box;outline: 0;
+    &:visited{text-decoration: none;}
+    &:hover{background-color: #ddd;}
+  }
+
+  &-collapse{
+
+    &-items{padding-left:40px;display:none;}
+    &-header{@extend .msb-item;margin:0;}
+    &-button{float: right;width: 60px;height: 60px;background: none;border:solid #e2dede;border-width:0 0px 1px 1px;cursor: pointer;outline:0;
+      &:hover{background-color: #ddd;}
+    }
+    &--open{
+      & > .msb-collapse-items{display: block}
+      & > .msb-collapse-button{background: red}
+    }
+  }
+
+
+  //states
+  &--open{
+    display: block;
+  }
+
+  //properties
+  &--left{
+    .msb-container{top:0;left:0px;width:320px;height:100%;}
+  }
+  &--right{
+    .msb-container{top:0;right:0px;width:320px;height:100%;}
+  }
+  &--top{
+    .msb-container{top:0;left:0;width:100%;height:auto;max-height: 100%;}
+  }
+  &--bottom{
+    .msb-container{bottom:0;left:0;width:100%;height:auto;max-height: 100%;}
+  }
+  &--full{
+    .msb-container{position: relative;position:static;width:100%;height: 100%;}
+  }
+
+
+  &--touch{cursor:pointer;touch-action:manipulation;}
+}
