@@ -8,7 +8,7 @@ class mkgSideBar{
         }else {
             resultHTML= `
             <div class="msb-collapse">
-                <button class="msb-collapse-button">+</button>
+                <div class="msb-collapse-button"></div>
                 <a href="${link}" title="${title ? title : text}"${follow ? '' : ' rel="nofollow"'} class="msb-collapse-header">${text}</a>
                 <div class="msb-collapse-items">
                     ${ items.reduce( (a,b)=> a+ this._itemToHTML(b) , '') }
@@ -101,7 +101,7 @@ class mkgSideBar{
         newBar.innerHTML =
         `<div class="msb-container">
             <header>
-                ${this.options.closeButton ? '<button class="msb-close"></button>' : ''}
+                ${this.options.closeButton ? '<div class="msb-close"></div>' : ''}
             </header>
             <div class="msb-content"></div>
             <footer></footer>
@@ -143,14 +143,17 @@ class mkgSideBar{
         }
     }
     open(){
-        this.target.className += ' msb--open';
+        if ((' ' + this.target.className + ' ').indexOf(" msb--close ") > -1 )
+        this.target.className = this.target.className.replace('msb--close','msb--open');
+        else
+            this.target.className += ' msb--open';
         if (this.options.onOpen) {
             this.options.onOpen.call(this);
         }
         return this;
     }
     close(){
-        this.target.className = this.target.className.replace(/ ?msb--open/,'');
+        this.target.className = this.target.className.replace('msb--open','msb--close');
         if (this.options.onClose) {
             this.options.onClose.call(this);
         }

@@ -20,7 +20,7 @@ mkgSideBar.sideNavigation.open();
 ```
 
 with options
-```
+```js
 var items=[
 {
     text:'Index Page',
@@ -40,9 +40,9 @@ mainMenu.toggle();
 
 OPTIONS
 =======
-baseURL:string
-position:string // left, top, bottom, right
-closeButton:bool
-animationLibrary:string //jquery, tweenMax, css, none
-onOpen:func
-onClose:func
+- baseURL:string
+- position:string // left, top, bottom, right
+- closeButton:bool
+- animationLibrary:string //jquery, tweenMax, css, none
+- onOpen:func
+- onClose:func

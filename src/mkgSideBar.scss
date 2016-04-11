@@ -1,14 +1,34 @@
 
+@keyframes sideopen{
+  0%{transform:translateX(-90px);opacity:0;}
+  100%{transform:translateX(0px);opacity:1;}
+}
+
+@keyframes sideopen2{
+  0%{opacity:0.3;}
+  100%{opacity:1;}
+}
 
 
-.msb{position:relative;overflow:hidden;position:fixed;z-index: 110;top:0;left:0;width:100%;height:100%;background: rgba(#000,0.3);display: none;
-  &-container{position: absolute;z-index: 101;overflow-y: auto;background: #f9f9f9;padding:10px 10px 10px 10px;}
-  &-close{width:60px;height:60px;border:0;background:rgba(#000,0.03);cursor:pointer;display: inline-block;float:right;touch-action:manipulation;outline:0;font-size: 0;line-height: 0;
-    &:before{content:'';width:55%;margin-top:0;margin-left:auto;margin-right:auto;height:1px;background-color:#000;display:block;transform:rotate(0deg);display: block}
-    &:after{content:'';width:55%;margin-top:0;margin-left:auto;margin-right:auto;margin-top:-1px;height:1px;background-color:#000;display:block;transform:rotate(45deg);display: block;}
+@keyframes sideclose{
+  0%{transform:translateX(0px);opacity:1;}
+  100%{transform:translateX(-90px);opacity:0;}
+}
+
+@keyframes sideclose2{
+  0%{opacity:1;}
+  100%{opacity:0;visibility: hidden;}
+}
+
+
+.msb{position:relative;overflow:hidden;position:fixed;z-index: 110;top:0;left:0;width:100%;height:100%;background: rgba(#000,0.3);display: none;animation-timing-function: cubic-bezier(0.150, 0.015, 0.355, 1.000);
+  &-container{position: absolute;z-index: 101;overflow-y: auto;background: #f9f9f9;padding:10px 10px 10px 10px;animation-timing-function: cubic-bezier(0.150, 0.015, 0.355, 1.000);box-sizing: border-box;}
+  &-close{width:60px;height:60px;border:0;cursor:pointer;display: inline-block;float:right;touch-action:manipulation;outline:0;font-size: 0;line-height: 0;margin:-10px -10px 0 0;@extend .msb--touch;
+    &:before{content:'';width:40%;margin-top:0;margin-left:auto;margin-right:auto;height:1px;background-color:#000;display:block;transform:rotate(-45deg);display: block;margin-top:50%;}
+    &:after{content:'';width:40%;margin-top:0;margin-left:auto;margin-right:auto;margin-top:-1px;height:1px;background-color:#000;display:block;transform:rotate(45deg);display: block;}
     &:hover{
-      &:before{width:80%;}
-      &:after{width:80%;}
+      &:before{width:40%;}
+      &:after{width:40%;}
     }
   }
   &-content{clear:both;
@@ -21,23 +41,33 @@
   }
 
   &-collapse{
-
-    &-items{padding-left:40px;display:none;}
+    &-items{padding-left:20px;display:none;box-sizing: border-box}
     &-header{@extend .msb-item;margin:0;}
-    &-button{float: right;width: 60px;height: 60px;background: none;border:solid #e2dede;border-width:0 0px 1px 1px;cursor: pointer;outline:0;
+    &-button{float: right;width: 60px;height: 60px;background: none;border:solid #e2dede;border-width:0 0px 1px 1px;cursor: pointer;outline:0;transition: all  200ms ease-out;@extend .msb--touch;box-sizing: border-box;
+      &:before{content:'';width:15px;margin: 50% auto 0 auto;height:1px;background: #333;display: block;transition:all 300ms;}
+      &:after{content:'';width:15px;margin: 0 auto;height:1px;background: #333;display: block;transform:translateY(-1px) rotate(-90deg);transition:all 300ms;}
       &:hover{background-color: #ddd;}
     }
+    .msb-item{margin:0}
     &--open{
       & > .msb-collapse-items{display: block}
-      & > .msb-collapse-button{background: red}
+      & > .msb-collapse-button{background: #f2ecec;
+        &:before{transform:rotate(-180deg);}
+        &:after{transform:translateY(-1px) rotate(-360deg);opacity:0;}
+      }
     }
   }
 
 
   //states
-  &--open{
-    display: block;
+  &--open{animation-duration: 0.30s; animation-name:sideopen2;display: block;
+    .msb-container{animation-duration: 0.30s; animation-name:sideopen;animation-delay: 300ms;opacity:0;animation-fill-mode: both}
   }
+
+  &--close{animation-duration: 0.40s;animation-duration: 0.60s; animation-name:sideclose2;display: block;animation-fill-mode: both;pointer-events: none;
+    .msb-container{ animation-name:sideclose;opacity:0;animation-duration: 0.1s}
+  }
+
 
   //properties
   &--left{
