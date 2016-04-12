@@ -1,5 +1,6 @@
 {
   "name": "mkgSideBar",
+  "version": "0.1",
   "description": "",
   "main": [
     "dist/mkgSideBar.min.css",
