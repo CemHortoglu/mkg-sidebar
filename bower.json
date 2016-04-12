@@ -1,0 +1,19 @@
+{
+  "name": "mkgSideBar",
+  "description": "",
+  "main": [
+    "dist/mkgSideBar.min.css",
+    "dist/mkgSideBar.min.js"
+  ],
+  "authors": [
+    "mkg <mehmetkamilgulen@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "ignore": [
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <script src="dist/mkgSideBar.js" charset="utf-8"></script>
+        <link rel="stylesheet" href="dist/mkgSideBar.css" media="screen" title="no title" charset="utf-8">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+        <style media="screen">
+            html{font:14px 'Open Sans';}
+            body{background-color:#e2e4e2;font-size:1em;}
+            #content{background:#f4f5fa;margin: 20px 40px 20px 40px;min-height: calc(100vh - 40px);padding:40px;box-sizing: border-box;}
+
+        </style>
+    </head>
+    <body>
+        <div id="content">
+            <div id="menu">
+                <a href="link1">text1</a>
+                <a href="link2" title="custom title">text2</a>
+                <a href="link3" rel="nofollow">text3</a>
+                <a href="link4">text4</a>
+            </div>
+
+        <!--
+        <aside class="msb msb-left">
+            <div class="msb-container">
+                <header>
+                    <button class="msb-close"></button>
+                </header>
+                <div class="msb-items">
+                    <div class="msb-item">falan1</div>
+                    <div class="msb-item">falan2</div>
+                    <div class="msb-item">falan3</div>
+                    <div class="msb-item">falan4</div>
+                </div>
+                <footer>
+                </footer>
+            </div>
+        </aside>
+    -->
+        <span class="deneme">
+        <h1>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nemo excepturi omnis expedita accusantium, maxime.!</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae quis est, ipsa temporibus quia magni, animi consequatur hic quo sit, repellendus consequuntur ullam unde nemo repudiandae vitae cum atque iure!</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae quis est, ipsa temporibus quia magni, animi consequatur hic quo sit, repellendus consequuntur ullam unde nemo repudiandae vitae cum atque iure!</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae quis est, ipsa temporibus quia magni, animi consequatur hic quo sit, repellendus consequuntur ullam unde nemo repudiandae vitae cum atque iure!</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae quis est, ipsa temporibus quia magni, animi consequatur hic quo sit, repellendus consequuntur ullam unde nemo repudiandae vitae cum atque iure!</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae quis est, ipsa temporibus quia magni, animi consequatur hic quo sit, repellendus consequuntur ullam unde nemo repudiandae vitae cum atque iure!</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae quis est, ipsa temporibus quia magni, animi consequatur hic quo sit, repellendus consequuntur ullam unde nemo repudiandae vitae cum atque iure!</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae quis est, ipsa temporibus quia magni, animi consequatur hic quo sit, repellendus consequuntur ullam unde nemo repudiandae vitae cum atque iure!</p>
+        </span>
+        <button onclick="mkgSideBar.menu.open();">Menüyü aç koçero</button>
+        <script>
+        var items = [
+            {
+                text:'Ana Sayfa',
+                link:'linkaasd'
+            },
+            {
+                text:'Ürünler',
+                link:'/urunler.html',
+                items:[
+                    {
+                        text:'ürün1',
+                        link:'/urunler/urun1',
+                        items:[
+                        {
+                            text:'Ürünler',
+                            link:'/urunler.html'
+                        }
+                        ]
+                    },
+                    {
+                        text:'ürün2',
+                        link:'/urunler/urun2'
+                    }
+
+                ]
+            },
+            {
+                text:'Ana Sayfa3',
+                link:'http://google.com/linkaasd',
+                follow:false
+            }
+        ]
+        new mkgSideBar('menu',items,{position:'left'}).toggle();
+        </script>
+    </div>
+    </body>
+</html>
