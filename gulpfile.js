@@ -6,6 +6,9 @@ rename = require('gulp-rename');
 babel = require('gulp-babel');
 sourcemaps  = require('gulp-sourcemaps');
 autoprefixer = require('gulp-autoprefixer');
+uglify = require('gulp-uglify');
+cssnano = require('gulp-cssnano');
+cleancss = require('gulp-clean-css');
 
 
 
@@ -15,7 +18,7 @@ gulp.task('sass',function () {
     .pipe(plumber())
     .pipe(sass())
     .pipe(autoprefixer())
-    .pipe(sourcemaps.write())
+    .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('dist'))
     .pipe(sync.reload({stream:true}));
 })
@@ -25,9 +28,21 @@ gulp.task('script',function () {
     .pipe(sourcemaps.init())
     .pipe(plumber())
     .pipe(babel())
-    .pipe(sourcemaps.write())
+    .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('dist'))
     .pipe(sync.reload({stream:true}));
+})
+
+
+gulp.task('minify',function () {
+    gulp.src('dist/*.js')
+    .pipe(uglify())
+    .pipe(rename({suffix:'.min'}))
+    .pipe(gulp.dest('dist'))
+    gulp.src('dist/*.css')
+    .pipe(cleancss())
+    .pipe(rename({suffix:'.min'}))
+    .pipe(gulp.dest('dist'))
 })
 
 gulp.task('html',function () {
@@ -37,8 +52,8 @@ gulp.task('html',function () {
 
 gulp.task('default',function () {
     serve();
-    gulp.watch('src/*.scss',['sass']);
-    gulp.watch(['src/*.js','src/*.es6'],['script']);
+    gulp.watch('src/*.scss',['sass','minify']);
+    gulp.watch(['src/*.js','src/*.es6'],['script','minify']);
     gulp.watch('*.html',['html']);
 });
 
