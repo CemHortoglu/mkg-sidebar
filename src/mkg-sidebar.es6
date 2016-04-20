@@ -1,16 +1,20 @@
-class mkgSideBar{
+/**
+ * mkg-sidebar
+ * https://github.com/mkg0/mkg-sidebar
+ */
+ class mSidebar{
     _itemToHTML({title,text,link,follow=true,items=[]}){
         if(link.search(/^(https?|ftp):/) !== 0)
             link= this.options.baseURL.replace(/\/$/,'') + '/' + link.replace(/^\//,'');
         let resultHTML='';
         if (items.length === 0) {
-            resultHTML = `<a href="${link}" title="${title ? title : text}"${follow ? '' : ' rel="nofollow"' } class="msb-item">${text}</a>`;
+            resultHTML = `<a href="${link}" title="${title ? title : text}"${follow ? '' : ' rel="nofollow"' } class="mSidebar-item">${text}</a>`;
         }else {
             resultHTML= `
-            <div class="msb-collapse">
-                <div class="msb-collapse-button"></div>
-                <a href="${link}" title="${title ? title : text}"${follow ? '' : ' rel="nofollow"'} class="msb-collapse-header">${text}</a>
-                <div class="msb-collapse-items">
+            <div class="mSidebar-collapse">
+                <div class="mSidebar-collapse-button"></div>
+                <a href="${link}" title="${title ? title : text}"${follow ? '' : ' rel="nofollow"'} class="mSidebar-collapse-header">${text}</a>
+                <div class="mSidebar-collapse-items">
                     ${ items.reduce( (a,b)=> a+ this._itemToHTML(b) , '') }
                 </div>
             </div>`;
@@ -22,7 +26,7 @@ class mkgSideBar{
         for (let i in this.items) {
             itemsHTML += this._itemToHTML(this.items[i])
         }
-        this.target.querySelector('.msb-content').innerHTML = itemsHTML;
+        this.target.querySelector('.mSidebar-content').innerHTML = itemsHTML;
         return this;
     }
     setItems(context){
@@ -41,7 +45,7 @@ class mkgSideBar{
         return this;
     }
     setContent(context){
-        this.target.querySelector('.msb-content').innerHTML = document.querySelector(context).innerHTML;
+        this.target.querySelector('.mSidebar-content').innerHTML = document.querySelector(context).innerHTML;
         return this;
     }
 
@@ -97,13 +101,13 @@ class mkgSideBar{
 
         let newBar = document.createElement('aside');
         this.target= newBar;
-        newBar.className +=` msb msb--${this.options.position}`;
+        newBar.className +=` mSidebar mSidebar--${this.options.position}`;
         newBar.innerHTML =
-        `<div class="msb-container">
+        `<div class="mSidebar-container">
             <header>
-                ${this.options.closeButton ? '<div class="msb-close"></div>' : ''}
+                ${this.options.closeButton ? '<div class="mSidebar-close"></div>' : ''}
             </header>
-            <div class="msb-content"></div>
+            <div class="mSidebar-content"></div>
             <footer></footer>
         </div>`;
         this.refreshItems();
@@ -112,7 +116,7 @@ class mkgSideBar{
             eval(`mkgSideBar.${this.propertyName}=this`);
         }
         if (this.options.closeButton) {
-            newBar.querySelector(".msb-close").addEventListener('click',this.close.bind(this));
+            newBar.querySelector(".mSidebar-close").addEventListener('click',this.close.bind(this));
         }
         newBar.addEventListener('click',this._onClick.bind(this));
 
@@ -133,34 +137,34 @@ class mkgSideBar{
             this.close.call(this);
         }
         let clsName= ' ' + e.target.className + ' ';
-        if (clsName.indexOf(" msb-collapse-button ") > -1 ){
+        if (clsName.indexOf(" mSidebar-collapse-button ") > -1 ){
             let parent = e.target.parentNode;
-            if ( ( ' ' + parent.className + ' ').indexOf(' msb-collapse--open ') > -1 ) {
-                parent.className = parent.className.replace(/( |$)msb-collapse--open/,'');
+            if ( ( ' ' + parent.className + ' ').indexOf(' mSidebar-collapse--open ') > -1 ) {
+                parent.className = parent.className.replace(/( |$)mSidebar-collapse--open/,'');
             }else {
-                parent.className += ' msb-collapse--open';
+                parent.className += ' mSidebar-collapse--open';
             }
         }
     }
     open(){
-        if ((' ' + this.target.className + ' ').indexOf(" msb--close ") > -1 )
-        this.target.className = this.target.className.replace('msb--close','msb--open');
+        if ((' ' + this.target.className + ' ').indexOf(" mSidebar--close ") > -1 )
+        this.target.className = this.target.className.replace('mSidebar--close','mSidebar--open');
         else
-            this.target.className += ' msb--open';
+            this.target.className += ' mSidebar--open';
         if (this.options.onOpen) {
             this.options.onOpen.call(this);
         }
         return this;
     }
     close(){
-        this.target.className = this.target.className.replace('msb--open','msb--close');
+        this.target.className = this.target.className.replace('mSidebar--open','mSidebar--close');
         if (this.options.onClose) {
             this.options.onClose.call(this);
         }
         return this;
     }
     toggle(){
-        if ((' ' + this.target.className + ' ').indexOf(" msb--open ") > -1 )
+        if ((' ' + this.target.className + ' ').indexOf(" mSidebar--open ") > -1 )
             this.close();
         else
             this.open();

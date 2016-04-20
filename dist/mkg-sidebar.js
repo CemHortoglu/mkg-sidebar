@@ -6,8 +6,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var mkgSideBar = function () {
-    _createClass(mkgSideBar, [{
+/**
+ * mkg-sidebar
+ * https://github.com/mkg0/mkg-sidebar
+ */
+
+var mSidebar = function () {
+    _createClass(mSidebar, [{
         key: '_itemToHTML',
         value: function _itemToHTML(_ref) {
             var _this = this;
@@ -23,9 +28,9 @@ var mkgSideBar = function () {
             if (link.search(/^(https?|ftp):/) !== 0) link = this.options.baseURL.replace(/\/$/, '') + '/' + link.replace(/^\//, '');
             var resultHTML = '';
             if (items.length === 0) {
-                resultHTML = '<a href="' + link + '" title="' + (title ? title : text) + '"' + (follow ? '' : ' rel="nofollow"') + ' class="msb-item">' + text + '</a>';
+                resultHTML = '<a href="' + link + '" title="' + (title ? title : text) + '"' + (follow ? '' : ' rel="nofollow"') + ' class="mSidebar-item">' + text + '</a>';
             } else {
-                resultHTML = '\n            <div class="msb-collapse">\n                <div class="msb-collapse-button"></div>\n                <a href="' + link + '" title="' + (title ? title : text) + '"' + (follow ? '' : ' rel="nofollow"') + ' class="msb-collapse-header">' + text + '</a>\n                <div class="msb-collapse-items">\n                    ' + items.reduce(function (a, b) {
+                resultHTML = '\n            <div class="mSidebar-collapse">\n                <div class="mSidebar-collapse-button"></div>\n                <a href="' + link + '" title="' + (title ? title : text) + '"' + (follow ? '' : ' rel="nofollow"') + ' class="mSidebar-collapse-header">' + text + '</a>\n                <div class="mSidebar-collapse-items">\n                    ' + items.reduce(function (a, b) {
                     return a + _this._itemToHTML(b);
                 }, '') + '\n                </div>\n            </div>';
             }
@@ -38,7 +43,7 @@ var mkgSideBar = function () {
             for (var i in this.items) {
                 itemsHTML += this._itemToHTML(this.items[i]);
             }
-            this.target.querySelector('.msb-content').innerHTML = itemsHTML;
+            this.target.querySelector('.mSidebar-content').innerHTML = itemsHTML;
             return this;
         }
     }, {
@@ -61,7 +66,7 @@ var mkgSideBar = function () {
     }, {
         key: 'setContent',
         value: function setContent(context) {
-            this.target.querySelector('.msb-content').innerHTML = document.querySelector(context).innerHTML;
+            this.target.querySelector('.mSidebar-content').innerHTML = document.querySelector(context).innerHTML;
             return this;
         }
     }, {
@@ -95,8 +100,8 @@ var mkgSideBar = function () {
         }
     }]);
 
-    function mkgSideBar() {
-        _classCallCheck(this, mkgSideBar);
+    function mSidebar() {
+        _classCallCheck(this, mSidebar);
 
         this.propertyName = null;
         this.items = []; //{text:string,link:string,title:string,follow:bool}
@@ -130,15 +135,15 @@ var mkgSideBar = function () {
 
         var newBar = document.createElement('aside');
         this.target = newBar;
-        newBar.className += ' msb msb--' + this.options.position;
-        newBar.innerHTML = '<div class="msb-container">\n            <header>\n                ' + (this.options.closeButton ? '<div class="msb-close"></div>' : '') + '\n            </header>\n            <div class="msb-content"></div>\n            <footer></footer>\n        </div>';
+        newBar.className += ' mSidebar mSidebar--' + this.options.position;
+        newBar.innerHTML = '<div class="mSidebar-container">\n            <header>\n                ' + (this.options.closeButton ? '<div class="mSidebar-close"></div>' : '') + '\n            </header>\n            <div class="mSidebar-content"></div>\n            <footer></footer>\n        </div>';
         this.refreshItems();
         document.body.appendChild(newBar);
         if (this.propertyName) {
             eval('mkgSideBar.' + this.propertyName + '=this');
         }
         if (this.options.closeButton) {
-            newBar.querySelector(".msb-close").addEventListener('click', this.close.bind(this));
+            newBar.querySelector(".mSidebar-close").addEventListener('click', this.close.bind(this));
         }
         newBar.addEventListener('click', this._onClick.bind(this));
 
@@ -152,26 +157,26 @@ var mkgSideBar = function () {
         return this;
     }
 
-    _createClass(mkgSideBar, [{
+    _createClass(mSidebar, [{
         key: '_onClick',
         value: function _onClick(e) {
             if (e.target === this.target && this.options.closeOnBackgroundClick) {
                 this.close.call(this);
             }
             var clsName = ' ' + e.target.className + ' ';
-            if (clsName.indexOf(" msb-collapse-button ") > -1) {
+            if (clsName.indexOf(" mSidebar-collapse-button ") > -1) {
                 var parent = e.target.parentNode;
-                if ((' ' + parent.className + ' ').indexOf(' msb-collapse--open ') > -1) {
-                    parent.className = parent.className.replace(/( |$)msb-collapse--open/, '');
+                if ((' ' + parent.className + ' ').indexOf(' mSidebar-collapse--open ') > -1) {
+                    parent.className = parent.className.replace(/( |$)mSidebar-collapse--open/, '');
                 } else {
-                    parent.className += ' msb-collapse--open';
+                    parent.className += ' mSidebar-collapse--open';
                 }
             }
         }
     }, {
         key: 'open',
         value: function open() {
-            if ((' ' + this.target.className + ' ').indexOf(" msb--close ") > -1) this.target.className = this.target.className.replace('msb--close', 'msb--open');else this.target.className += ' msb--open';
+            if ((' ' + this.target.className + ' ').indexOf(" mSidebar--close ") > -1) this.target.className = this.target.className.replace('mSidebar--close', 'mSidebar--open');else this.target.className += ' mSidebar--open';
             if (this.options.onOpen) {
                 this.options.onOpen.call(this);
             }
@@ -180,7 +185,7 @@ var mkgSideBar = function () {
     }, {
         key: 'close',
         value: function close() {
-            this.target.className = this.target.className.replace('msb--open', 'msb--close');
+            this.target.className = this.target.className.replace('mSidebar--open', 'mSidebar--close');
             if (this.options.onClose) {
                 this.options.onClose.call(this);
             }
@@ -189,12 +194,12 @@ var mkgSideBar = function () {
     }, {
         key: 'toggle',
         value: function toggle() {
-            if ((' ' + this.target.className + ' ').indexOf(" msb--open ") > -1) this.close();else this.open();
+            if ((' ' + this.target.className + ' ').indexOf(" mSidebar--open ") > -1) this.close();else this.open();
             return this;
         }
     }]);
 
-    return mkgSideBar;
+    return mSidebar;
 }();
 
 var sideBara = {
@@ -290,4 +295,4 @@ var sideBara = {
         });
     }
 };
-//# sourceMappingURL=mkgSideBar.js.map
+//# sourceMappingURL=mkg-sidebar.js.map

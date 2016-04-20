@@ -35,11 +35,11 @@ gulp.task('script',function () {
 
 
 gulp.task('minify',function () {
-    gulp.src('dist/*.js')
+    gulp.src('dist/mkg-sidebar.js')
     .pipe(uglify())
     .pipe(rename({suffix:'.min'}))
     .pipe(gulp.dest('dist'))
-    gulp.src('dist/*.css')
+    gulp.src('dist/mkg-sidebar.css')
     .pipe(cleancss())
     .pipe(rename({suffix:'.min'}))
     .pipe(gulp.dest('dist'))

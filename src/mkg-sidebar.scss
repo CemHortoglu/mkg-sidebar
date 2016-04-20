@@ -1,4 +1,7 @@
-
+/**
+ * mkg-sidebar
+ * https://github.com/mkg0/mkg-sidebar
+ */
 @keyframes sideopen{
   0%{transform:translateX(-90px);opacity:0;}
   100%{transform:translateX(0px);opacity:1;}
@@ -21,7 +24,7 @@
 }
 
 
-.msb{position:relative;overflow:hidden;position:fixed;z-index: 110;top:0;left:0;width:100%;height:100%;background: rgba(#000,0.3);display: none;animation-timing-function: cubic-bezier(0.150, 0.015, 0.355, 1.000);
+.mSidebar{position:relative;overflow:hidden;position:fixed;z-index: 110;top:0;left:0;width:100%;height:100%;background: rgba(#000,0.3);display: none;animation-timing-function: cubic-bezier(0.150, 0.015, 0.355, 1.000);
   &-container{position: absolute;z-index: 101;overflow-y: auto;background: #f9f9f9;padding:10px 10px 10px 10px;animation-timing-function: cubic-bezier(0.150, 0.015, 0.355, 1.000);box-sizing: border-box;}
   &-close{width:60px;height:60px;border:0;cursor:pointer;display: inline-block;float:right;touch-action:manipulation;outline:0;font-size: 0;line-height: 0;margin:-10px -10px 0 0;@extend .msb--touch;
     &:before{content:'';width:40%;margin-top:0;margin-left:auto;margin-right:auto;height:1px;background-color:#000;display:block;transform:rotate(-45deg);display: block;margin-top:50%;}
