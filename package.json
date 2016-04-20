@@ -1,8 +1,11 @@
 {
-  "name": "mkgSideBar",
-  "version": "1.0.0",
+  "name": "mkg-sidebar",
+  "version": "0.1.1",
   "description": "",
-  "main": "index.js",
+  "main": [
+    "dist/mkg-sidebar.css",
+    "dist/mkg-sidebar.js"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

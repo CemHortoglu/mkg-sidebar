@@ -1,10 +1,10 @@
 {
-  "name": "mkgSideBar",
-  "version": "0.1",
+  "name": "mkg-sidebar",
+  "version": "0.1.1",
   "description": "",
   "main": [
-    "dist/mkgSideBar.css",
-    "dist/mkgSideBar.js"
+    "dist/mkg-sidebar.css",
+    "dist/mkg-sidebar.js"
   ],
   "authors": [
     "mkg <mehmetkamilgulen@gmail.com>"
