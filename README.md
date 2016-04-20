@@ -47,7 +47,7 @@ OPTIONS
 
 TO DO
 =======
-add alternative animation styles
-add alternative visual style
-fix for older browser versions
-documantation
+- add alternative animation styles
+- add alternative visual style
+- fix for older browser versions
+- documantation
