@@ -140,7 +140,7 @@ var mSidebar = function () {
         this.refreshItems();
         document.body.appendChild(newBar);
         if (this.propertyName) {
-            eval('mkgSideBar.' + this.propertyName + '=this');
+            eval('mSidebar.' + this.propertyName + '=this');
         }
         if (this.options.closeButton) {
             newBar.querySelector(".mSidebar-close").addEventListener('click', this.close.bind(this));
