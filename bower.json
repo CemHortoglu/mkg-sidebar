@@ -3,8 +3,8 @@
   "version": "0.1",
   "description": "",
   "main": [
-    "dist/mkgSideBar.min.css",
-    "dist/mkgSideBar.min.js"
+    "dist/mkgSideBar.css",
+    "dist/mkgSideBar.js"
   ],
   "authors": [
     "mkg <mehmetkamilgulen@gmail.com>"
