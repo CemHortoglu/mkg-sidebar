@@ -1,19 +1,24 @@
+/*jshint esversion:6*/
 /**
  * mkg-sidebar
  * https://github.com/mkg0/mkg-sidebar
  */
  class mSidebar{
     _itemToHTML({title,text,link,follow=true,items=[]}){
-        if(link.search(/^(https?|ftp):/) !== 0)
+        if(link && link.search(/^(https?|ftp):/) !== 0)
             link= this.options.baseURL.replace(/\/$/,'') + '/' + link.replace(/^\//,'');
         let resultHTML='';
         if (items.length === 0) {
-            resultHTML = `<a href="${link}" title="${title ? title : text}"${follow ? '' : ' rel="nofollow"' } class="mSidebar-item">${text}</a>`;
+            resultHTML = `<a href="${link ? link : ''}" title="${title ? title : text}"${follow ? '' : ' rel="nofollow"' } class="mSidebar-item">${text}</a>`;
         }else {
+            let linkHTML = link ?
+            `<a href="${link}" title="${title ? title : text}"${follow ? '' : ' rel="nofollow"'} class="mSidebar-collapse-header">${text}</a>` :
+            `<div class="mSidebar-collapse-header mSidebar-collapse--buttonrole">${text}</div>`;
+
             resultHTML= `
             <div class="mSidebar-collapse">
                 <div class="mSidebar-collapse-button"></div>
-                <a href="${link}" title="${title ? title : text}"${follow ? '' : ' rel="nofollow"'} class="mSidebar-collapse-header">${text}</a>
+                ${linkHTML}
                 <div class="mSidebar-collapse-items">
                     ${ items.reduce( (a,b)=> a+ this._itemToHTML(b) , '') }
                 </div>
@@ -137,7 +142,7 @@
             this.close.call(this);
         }
         let clsName= ' ' + e.target.className + ' ';
-        if (clsName.indexOf(" mSidebar-collapse-button ") > -1 ){
+        if (clsName.indexOf("mSidebar-collapse-button") > -1 || clsName.indexOf("mSidebar-collapse--buttonrole") > -1){
             let parent = e.target.parentNode;
             if ( ( ' ' + parent.className + ' ').indexOf(' mSidebar-collapse--open ') > -1 ) {
                 parent.className = parent.className.replace(/( |$)mSidebar-collapse--open/,'');

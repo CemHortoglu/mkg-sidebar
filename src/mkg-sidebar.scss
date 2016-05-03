@@ -35,7 +35,7 @@
     }
   }
   &-content{clear:both;
-    & > .mSidebar-item:first-child{border-top:1px solid #e2dede;}
+    & > .mSidebar-item:first-child,& > .mSidebar-collapse:first-child{border-top:1px solid #e2dede;}
     & > .mSidebar-collapse{margin:0 -10px;}
   }
   &-item{display:block;text-align:left;margin:0 -10px;padding:0 20px;font-size:1rem;line-height: 60px;height:60px;overflow:hidden;text-decoration: none;transition: all  200ms ease-out;cursor: pointer;border-bottom: 1px solid #e2dede;color:#555;box-sizing: border-box;outline: 0;

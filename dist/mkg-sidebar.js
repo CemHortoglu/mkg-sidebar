@@ -6,6 +6,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/*jshint esversion:6*/
 /**
  * mkg-sidebar
  * https://github.com/mkg0/mkg-sidebar
@@ -25,12 +26,14 @@ var mSidebar = function () {
             var _ref$items = _ref.items;
             var items = _ref$items === undefined ? [] : _ref$items;
 
-            if (link.search(/^(https?|ftp):/) !== 0) link = this.options.baseURL.replace(/\/$/, '') + '/' + link.replace(/^\//, '');
+            if (link && link.search(/^(https?|ftp):/) !== 0) link = this.options.baseURL.replace(/\/$/, '') + '/' + link.replace(/^\//, '');
             var resultHTML = '';
             if (items.length === 0) {
-                resultHTML = '<a href="' + link + '" title="' + (title ? title : text) + '"' + (follow ? '' : ' rel="nofollow"') + ' class="mSidebar-item">' + text + '</a>';
+                resultHTML = '<a href="' + (link ? link : '') + '" title="' + (title ? title : text) + '"' + (follow ? '' : ' rel="nofollow"') + ' class="mSidebar-item">' + text + '</a>';
             } else {
-                resultHTML = '\n            <div class="mSidebar-collapse">\n                <div class="mSidebar-collapse-button"></div>\n                <a href="' + link + '" title="' + (title ? title : text) + '"' + (follow ? '' : ' rel="nofollow"') + ' class="mSidebar-collapse-header">' + text + '</a>\n                <div class="mSidebar-collapse-items">\n                    ' + items.reduce(function (a, b) {
+                var linkHTML = link ? '<a href="' + link + '" title="' + (title ? title : text) + '"' + (follow ? '' : ' rel="nofollow"') + ' class="mSidebar-collapse-header">' + text + '</a>' : '<div class="mSidebar-collapse-header mSidebar-collapse--buttonrole">' + text + '</div>';
+
+                resultHTML = '\n            <div class="mSidebar-collapse">\n                <div class="mSidebar-collapse-button"></div>\n                ' + linkHTML + '\n                <div class="mSidebar-collapse-items">\n                    ' + items.reduce(function (a, b) {
                     return a + _this._itemToHTML(b);
                 }, '') + '\n                </div>\n            </div>';
             }
@@ -164,7 +167,7 @@ var mSidebar = function () {
                 this.close.call(this);
             }
             var clsName = ' ' + e.target.className + ' ';
-            if (clsName.indexOf(" mSidebar-collapse-button ") > -1) {
+            if (clsName.indexOf("mSidebar-collapse-button") > -1 || clsName.indexOf("mSidebar-collapse--buttonrole") > -1) {
                 var parent = e.target.parentNode;
                 if ((' ' + parent.className + ' ').indexOf(' mSidebar-collapse--open ') > -1) {
                     parent.className = parent.className.replace(/( |$)mSidebar-collapse--open/, '');
