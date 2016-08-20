@@ -3,41 +3,48 @@
 mkg-sidebar is flexible navigation bar -or pane- with nested menu support for mobile and  web UI. You can easily set up navigation items or custom html content. then u just need  trigger to open.
 
 
-USAGE
-=======
+## Install
+install with bower
+```
+bower install mkg-sidebar --save
+```
+or you can get the [latest release](https://github.com/mkg0/mkg-sidebar/releases) of mkg-sidebar from repo
+
+import script and css files
+```html
+<script src="mkg-sidebar.min.js"></script>
+<link rel="stylesheet" type="text/css" href="mkg-sidebar.min.css">
+```
+
+## Usage
 ```js
-var menu =  new  mSidebar({addItems:'#navMenu'})
+var items = [
+    {
+        text:'Main Page',
+        link:'Link1'
+    },
+    {
+        text:'Another Page',
+        link:'AnotherLink'
+    }
+];
+
+var menu =  new  mSidebar({baseURL: 'http://site.com/'});
+menu.addItem(items);
 menu.open();
 ```
-
-
-or other usage style
+or the other usage
 ```js
-new mSidebar('sideNavigation',['Main Page','About Us','Contact']) //automatic creates links
-mSidebar.sideNavigation.open();
+new mSidebar('sideNavigation',{defaultFollow:false, autoCollapse:true})
+mSidebar.sideNavigation.addItemFrom('#menu a');
+mSidebar.sideNavigation.addItem({
+    text:'Contact',
+    link:'http://google.com/',
+    follow:false
+});
+mSidebar.sideNavigation.toggle();
 ```
-
-with options
-```js
-var items=[
-{
-    text:'Index Page',
-    link:'/',
-    nofollow:true
-},
-{
-    text:'About Us',
-    link:'aboutus.html',
-    title:'Our Company'
-}
-]
-var mainMenu = mSidebar.panel.create(items,{baseURL:'http://url.com',position:'left'})
-mainMenu.toggle();
-```
-
-
-OPTIONS WITH DEFAULT VALUES
-=======
+## Options with Default Values
 ```
 baseURL:'' // base url to every relative menu links
 position:'left' // left, top, bottom, right
@@ -51,9 +58,8 @@ onOpen:null // handler
 onClose:null // handler
 ```
 
-METHODS
-=======
-```
+## Methods
+```js
 var menu =  new  mSidebar();
 
 menu.addItem({
@@ -81,11 +87,12 @@ menu.setFooter('#divWithContent'); //sets the menu footer content from targeted 
 
 menu.refreshItems();
 ```
-Visualize
-=======
 
-#### scss styling
-```
+
+## Visualize
+
+#### Scss styling
+```scss
 .mSidebar{
   & &-item{} //all menu items
   & &-collapse{ //whole collapsable item container
@@ -112,15 +119,13 @@ Visualize
 .mSidebar-collapse-button.mSidebar--d2 {}
 ```
 
-Building
-=======
+## Building
 ensure that you have all dependency packes with 'npm install' and install gulp to gloval with `npm install gulp -g`
 package using gulp for building. following tasks are avaliable:
 - `gulp default` : watches src files and serves index.html for developing
 - `gulp minify` : creates minified version of package. don't forget to use it after development ends.
 
-TO DO
-=======
+## TO DO
 - add alternative animation styles
 - optional animation libraries //'It based on native js and css. Animation libraries *TweenMax*, *jQuery animate* are also optional.'
 - add alternative visual style
