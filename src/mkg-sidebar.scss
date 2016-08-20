@@ -92,3 +92,16 @@
 
   &--touch{cursor:pointer;touch-action:manipulation;}
 }
+
+.mSidebar{
+  & &-item{} //all menu items
+  & &-collapse{ //whole collapsable item container
+    //a collapsable item has 3 parts:
+    & &-header{} //header area is the part of without button and sub items
+    & &-items{} //items area is the sub-items container of collapsable item
+    & &-button{} // button area of the collapsable item
+  }
+  & &--d0{} //you can compine any class with mSidebar--d{level} class
+  & &--d1{}
+  & &--d2{}
+}

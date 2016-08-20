@@ -16,10 +16,8 @@
     <body>
         <div id="content">
             <div id="menu">
-                <a href="link1">text1</a>
-                <a href="link2" title="custom title">text2</a>
-                <a href="link3" rel="nofollow">text3</a>
-                <a href="link4">text4</a>
+                <a href="link2" title="custom title">Created with getItemFrom()</a>
+                <a href="link3" rel="nofollow">Another One</a>
             </div>
         <span class="deneme">
         <h1>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nemo excepturi omnis expedita accusantium, maxime.!</h1>
@@ -31,7 +29,7 @@
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae quis est, ipsa temporibus quia magni, animi consequatur hic quo sit, repellendus consequuntur ullam unde nemo repudiandae vitae cum atque iure!</p>
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae quis est, ipsa temporibus quia magni, animi consequatur hic quo sit, repellendus consequuntur ullam unde nemo repudiandae vitae cum atque iure!</p>
         </span>
-        <button onclick="mSidebar.menu.open();">Open Sidebar</button>
+        <button onclick="mSidebar.alternativeAccessToMenu.open();">Open Sidebar</button>
         <script>
         var items = [
             {
@@ -65,7 +63,11 @@
                 follow:false
             }
         ]
-        new mSidebar('menu',items,{position:'left'}).toggle();
+        var menu =  new  mSidebar('alternativeAccessToMenu',{autoCollapse:true});
+        menu.addItem(items);
+        menu.addItemFrom('#menu a');
+        menu.open();
+
         </script>
     </div>
     </body>

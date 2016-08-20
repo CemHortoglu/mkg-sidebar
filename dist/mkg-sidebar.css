@@ -134,7 +134,7 @@
       width: 40%; }
   .mSidebar-content {
     clear: both; }
-    .mSidebar-content > .mSidebar-item:first-child, .mSidebar-content > .mSidebar-collapse-header:first-child {
+    .mSidebar-content > .mSidebar-item:first-child, .mSidebar-content > .mSidebar-collapse-header:first-child, .mSidebar-content > .mSidebar-collapse:first-child {
       border-top: 1px solid #e2dede; }
     .mSidebar-content > .mSidebar-collapse {
       margin: 0 -10px; }

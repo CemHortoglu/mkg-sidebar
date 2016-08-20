@@ -1,26 +1,25 @@
-/*jshint esversion:6*/
 /**
  * mkg-sidebar
  * https://github.com/mkg0/mkg-sidebar
  */
  class mSidebar{
-    _itemToHTML({title,text,link,follow=true,items=[]}){
+    _itemToHTML({title,text,link,follow=true,items=[]},depth=0){
         if(link && link.search(/^(https?|ftp):/) !== 0)
             link= this.options.baseURL.replace(/\/$/,'') + '/' + link.replace(/^\//,'');
         let resultHTML='';
         if (items.length === 0) {
-            resultHTML = `<a href="${link ? link : ''}" title="${title ? title : text}"${follow ? '' : ' rel="nofollow"' } class="mSidebar-item">${text}</a>`;
+            resultHTML = `<a href="${link ? link : ''}" title="${title ? title : text}"${follow ? '' : ' rel="nofollow"' } class="mSidebar-item mSidebar--d${depth}">${text}</a>`;
         }else {
             let linkHTML = link ?
-            `<a href="${link}" title="${title ? title : text}"${follow ? '' : ' rel="nofollow"'} class="mSidebar-collapse-header">${text}</a>` :
-            `<div class="mSidebar-collapse-header mSidebar-collapse--buttonrole">${text}</div>`;
+            `<a href="${link}" title="${title ? title : text}"${follow ? '' : ' rel="nofollow"'} class="mSidebar-collapse-header mSidebar--d${depth}">${text}</a>` :
+            `<div class="mSidebar-collapse-header mSidebar--d${depth} mSidebar-collapse--buttonrole">${text}</div>`;
 
             resultHTML= `
-            <div class="mSidebar-collapse">
-                <div class="mSidebar-collapse-button"></div>
+            <div class="mSidebar-collapse mSidebar--d${depth}">
+                <div class="mSidebar-collapse-button mSidebar--d${depth}"></div>
                 ${linkHTML}
-                <div class="mSidebar-collapse-items">
-                    ${ items.reduce( (a,b)=> a+ this._itemToHTML(b) , '') }
+                <div class="mSidebar-collapse-items mSidebar--d${depth+1}">
+                    ${ items.reduce( (a,b)=> a+ this._itemToHTML(b,depth+1) , '') }
                 </div>
             </div>`;
         }
@@ -34,32 +33,49 @@
         this.target.querySelector('.mSidebar-content').innerHTML = itemsHTML;
         return this;
     }
-    setItems(context){
+    setContent(context){
+        this.target.querySelector('.mSidebar-content').innerHTML = document.querySelector(context).innerHTML;
+        return this;
+    }
+    setHeader(context){
+        this.target.querySelector('.mSidebar-header').innerHTML = document.querySelector(context).innerHTML;
+        return this;
+    }
+    setFooter(context){
+        this.target.querySelector('.mSidebar-footer').innerHTML = document.querySelector(context).innerHTML;
+        return this;
+    }
+    removeItems(){
         this.items=[];
+        this.refreshItems();
+        return this;
+    }
+    addItemFrom(context){
         let foundItems = document.querySelectorAll(context);
         for (var i = 0; i < foundItems.length; i++) {
-            console.log(foundItems[i]   );
             this.addItem({
-                title: foundItems[i].getAttribute('title'),
+                title: foundItems[i].getAttribute('title') ? foundItems[i].getAttribute('title') : this.options.defaultTitle,
                 text:foundItems[i].innerHTML.replace(/<[^>]+>/g,''),
-                link: foundItems[i].getAttribute('href'),
-                follow: foundItems[i].getAttribute('rel') === 'nofollow' ?false: true
+                link: foundItems[i].getAttribute('href') ? foundItems[i].getAttribute('href') : '/',
+                follow: foundItems[i].getAttribute('rel') === 'nofollow' ? false: this.options.defaultFollow
             },false)
         }
         this.refreshItems();
         return this;
     }
-    setContent(context){
-        this.target.querySelector('.mSidebar-content').innerHTML = document.querySelector(context).innerHTML;
-        return this;
-    }
-
     addItem({title,text,link,follow=true,items=[]},refresh=true){
         if(arguments.length ===0) return false;
         if (typeof arguments[0] === 'string'){
             title=arguments[0];
             text=arguments[0];
             link=arguments[0].toLowerCase().replace(/[^a-z0-9]/,'');
+        }else if (Object.prototype.toString.call( arguments[0] ) == '[object Array]') {
+            var items = arguments[0];
+            for (var i = 0; i < items.length; i++) {
+                this.addItem(items[i],false);
+            }
+            if (refresh) this.refreshItems();
+            return this;
         }
         let newItem= {
             title:title,
@@ -80,11 +96,12 @@
             position:'left', // left, top, bottom, right
             closeButton:true,
             closeOnBackgroundClick:true,
-            animationType:'css', //jquery, tweenMax, css, none
+            animationType:'css', // todo jquery, tweenMax, css, none
+            defaultTitle:'',
+            defaultFollow:true,
             onOpen:null,
             onClose:null,
-            setItems:undefined,//method
-            setContent:undefined//method
+            autoCollapse:false// auto collapse on close
         };
         for (var i = 0; i < arguments.length; i++) {
             let argument = arguments[i];
@@ -111,9 +128,10 @@
         `<div class="mSidebar-container">
             <header>
                 ${this.options.closeButton ? '<div class="mSidebar-close"></div>' : ''}
+                <div class="mSidebar-header"></div>
             </header>
             <div class="mSidebar-content"></div>
-            <footer></footer>
+            <footer class="mSidebar-footer"></footer>
         </div>`;
         this.refreshItems();
         document.body.appendChild(newBar);
@@ -124,15 +142,6 @@
             newBar.querySelector(".mSidebar-close").addEventListener('click',this.close.bind(this));
         }
         newBar.addEventListener('click',this._onClick.bind(this));
-
-        if (this.options.setItems) {
-            this.setItems(this.options.setItems);
-        }
-        if (this.options.setContent) {
-            this.setContent(this.options.setContent);
-        }
-
-
 
         return this;
     }
@@ -152,6 +161,9 @@
         }
     }
     open(){
+        // setInterval(function () {
+        //     this.uncollapse();
+        // }.bind(this),4000);
         if ((' ' + this.target.className + ' ').indexOf(" mSidebar--close ") > -1 )
         this.target.className = this.target.className.replace('mSidebar--close','mSidebar--open');
         else
@@ -163,9 +175,8 @@
     }
     close(){
         this.target.className = this.target.className.replace('mSidebar--open','mSidebar--close');
-        if (this.options.onClose) {
-            this.options.onClose.call(this);
-        }
+        if (this.options.autoCollapse) this.collapse();
+        if (this.options.onClose) this.options.onClose.call(this);
         return this;
     }
     toggle(){
@@ -175,131 +186,18 @@
             this.open();
         return this;
     }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var sideBara = {
-    target:null,
-    changeTarget:function(targetBar){
-        if(targetBar) this.target= $(targetBar);
-        if(!this.target.is('.sideBar')) this.target = this.target.parents('.sideBar');
-    },open:function(targetBar){
-        this.changeTarget(targetBar);
-        if(this.target.is('.sideBar--full')) {
-            TweenMax.set(this.target,{display:'block'});
-            TweenMax.from(this.target,0.24,{opacity:0});
-            TweenMax.staggerFrom(this.target.find('.sideBar-item'),0.35,{xPercent:-20,opacity:0,delay:0.15},0.07);
-        }else if(this.target.is('.sideBar--left')) {
-            TweenMax.set(this.target,{display:'block'});
-            TweenMax.from(this.target,0.24,{opacity:0});
-            TweenMax.from(this.target.find('.sideBar-container'),0.24,{xPercent:-100,opacity:0,delay:0.3});
-            TweenMax.from(this.target.find('.sideBar-item'),0.35,{xPercent:-20,opacity:0.4,delay:0.430});
-        }else if(this.target.is('.sideBar--right')) {
-            TweenMax.set(this.target,{display:'block'});
-            TweenMax.from(this.target,0.24,{opacity:0});
-            TweenMax.from(this.target.find('.sideBar-container'),0.24,{xPercent:100,opacity:0,delay:0.3});
-            TweenMax.from(this.target.find('.sideBar-item'),0.35,{xPercent:-20,opacity:0.4,delay:0.430});
-        }else if(this.target.is('.sideBar--top')) {
-            this.target.css('display','block');
-            TweenMax.to(this.target,0.2,{opacity:1});
-            TweenMax.from(this.target.find('.sideBar-container'),0.4,{opacity:'0.4', yPercent:-100, delay: 0.2});
-            TweenMax.staggerFrom(this.target.find('.sideBar-item'),0.55,{opacity:'0', y:-55, scale:0.3},0.08);
-        }else if(this.target.is('.sideBar--bottom')) {
-            this.target.css('display','block');
-            TweenMax.to(this.target,0.2,{opacity:1});
-            TweenMax.from(this.target.find('.sideBar-container'),0.4,{opacity:'0.4', yPercent:100, delay: 0.2});
-            TweenMax.staggerFrom(this.target.find('.sideBar-item'),0.55,{opacity:'0', y:-55, scale:0.3},0.08);
+    collapse(){
+        let foundItems = this.target.querySelectorAll('.mSidebar-collapse--open');
+        for (var i = 0; i < foundItems.length; i++) {
+            foundItems[i].className= foundItems[i].className.replace(/ ?mSidebar-collapse--open/,'');
         }
-    },close:function(targetBar){
-        this.changeTarget(targetBar);
-        if(this.target.is('.sideBar--full')) {
-            TweenMax.staggerTo(this.target.find('.sideBar-item'),0.35,{xPercent:-20,opacity:0},0.07);
-            TweenMax.to(this.target,0.24,{opacity:0,delay:0.6,
-                onComplete:function(){
-                    TweenMax.set(this.target,{display:'none',opacity:1});
-                    TweenMax.set(this.target.find('.sideBar-container'),{xPercent:0,opacity:1});
-                    TweenMax.set(this.target.find('.sideBar-item'),{xPercent:0,opacity:1});
-                }
-            });
-
-        }else if(this.target.is('.sideBar--left')) {
-            TweenMax.to(this.target.find('.sideBar-item'),0.25,{xPercent:-20,opacity:0.4});
-            TweenMax.to(this.target.find('.sideBar-container'),0.25,{xPercent:-100,opacity:0,delay:0.1});
-            TweenMax.to(this.target,0.24,{
-                opacity:0,
-                delay:0.430,
-                onComplete:function(){
-                    TweenMax.set(this.target,{display:'none',opacity:1});
-                    TweenMax.set(this.target.find('.sideBar-container'),{xPercent:0,opacity:1});
-                    TweenMax.set(this.target.find('.sideBar-item'),{xPercent:0,opacity:1});
-                }
-            });
-        }else if(this.target.is('.sideBar--right')) {
-            TweenMax.to(this.target.find('.sideBar-item'),0.25,{xPercent:-20,opacity:0.4});
-            TweenMax.to(this.target.find('.sideBar-container'),0.25,{xPercent:100,opacity:0,delay:0.1});
-            TweenMax.to(this.target,0.24,{
-                opacity:0,
-                delay:0.430,
-                onComplete:function(){
-                    TweenMax.set(this.target,{display:'none',opacity:1});
-                    TweenMax.set(this.target.find('.sideBar-container'),{xPercent:0,opacity:1});
-                    TweenMax.set(this.target.find('.sideBar-item'),{xPercent:0,opacity:1});
-                }
-            });
-        }else if(this.target.is('.sideBar--top')) {
-            TweenMax.staggerTo(this.target.find('.sideBar-item'),0.55,{opacity:'0', y:-55, scale:0.3},0.08);
-            TweenMax.to(this.target.find('.sideBar-container'),0.4,{opacity:'0.4', yPercent:-100, delay: 0.5});
-            TweenMax.to(this.target,0.2,{opacity:0,delay:0.8,onComplete:function(){
-                    TweenMax.set(this.target,{display:'none',opacity:1});
-                    TweenMax.set(this.target.find('.sideBar-container'),{yPercent:0,opacity:1});
-                    TweenMax.set(this.target.find('.sideBar-item'),{y:0,opacity:1,scale:1});
-            }});
-        }else if(this.target.is('.sideBar--bottom')) {
-            TweenMax.staggerTo(this.target.find('.sideBar-item'),0.55,{opacity:'0', y:55, scale:0.3},0.08);
-            TweenMax.to(this.target.find('.sideBar-container'),0.4,{opacity:'0.4', yPercent:100, delay: 0.5});
-            TweenMax.to(this.target,0.2,{opacity:0,delay:0.8,onComplete:function(){
-                    TweenMax.set(this.target,{display:'none',opacity:1});
-                    TweenMax.set(this.target.find('.sideBar-container'),{yPercent:0,opacity:1});
-                    TweenMax.set(this.target.find('.sideBar-item'),{y:0,opacity:1,scale:1});
-            }});
+        return this;
+    }
+    uncollapse(){
+        let foundItems = this.target.querySelectorAll('.mSidebar-collapse:not(.mSidebar-collapse--open)');
+        for (var i = 0; i < foundItems.length; i++) {
+            foundItems[i].className += ' mSidebar-collapse--open';
         }
-
-    },init:function(){
-        $('.sideBar').click(function(e){
-            var target = $(e.target);
-            if (target.is('.sideBar-close, .sideBar')) {
-                sideBar.close(this);
-            }
-        })
+        return this;
     }
 }
