@@ -50,7 +50,7 @@ baseURL:'' // base url to every relative menu links
 position:'left' // left, top, bottom, right
 closeButton:true //
 closeOnBackgroundClick:true //
-animationType:'css' // todo jquery, tweenMax, css, none
+animationType:'slide' // TODO:push, spread
 defaultTitle:'' //default title attr value
 defaultFollow:true, // default follow attr value
 autoCollapse:false// auto collapse on close
@@ -64,7 +64,8 @@ var menu =  new  mSidebar();
 
 menu.addItem({
     text:'Test',
-    link:'/PageLink.html'
+    link:'/PageLink.html',
+    callback:function(){console.log(this);}
 }); //add menu item
 
 menu.collapse(); //collapse all submenus

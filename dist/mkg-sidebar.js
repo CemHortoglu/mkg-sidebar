@@ -15,11 +15,11 @@ var mSidebar = function () {
     _createClass(mSidebar, [{
         key: '_itemToHTML',
         value: function _itemToHTML(_ref) {
-            var _this = this;
-
             var title = _ref.title;
             var text = _ref.text;
             var link = _ref.link;
+            var _ref$callback = _ref.callback;
+            var callback = _ref$callback === undefined ? null : _ref$callback;
             var _ref$follow = _ref.follow;
             var follow = _ref$follow === undefined ? true : _ref$follow;
             var _ref$items = _ref.items;
@@ -27,26 +27,40 @@ var mSidebar = function () {
             var depth = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
             if (link && link.search(/^(https?|ftp):/) !== 0) link = this.options.baseURL.replace(/\/$/, '') + '/' + link.replace(/^\//, '');
-            var resultHTML = '';
-            if (items.length === 0) {
-                resultHTML = '<a href="' + (link ? link : '') + '" title="' + (title ? title : text) + '"' + (follow ? '' : ' rel="nofollow"') + ' class="mSidebar-item mSidebar--d' + depth + '">' + text + '</a>';
-            } else {
-                var linkHTML = link ? '<a href="' + link + '" title="' + (title ? title : text) + '"' + (follow ? '' : ' rel="nofollow"') + ' class="mSidebar-collapse-header mSidebar--d' + depth + '">' + text + '</a>' : '<div class="mSidebar-collapse-header mSidebar--d' + depth + ' mSidebar-collapse--buttonrole">' + text + '</div>';
-
-                resultHTML = '\n            <div class="mSidebar-collapse mSidebar--d' + depth + '">\n                <div class="mSidebar-collapse-button mSidebar--d' + depth + '"></div>\n                ' + linkHTML + '\n                <div class="mSidebar-collapse-items mSidebar--d' + (depth + 1) + '">\n                    ' + items.reduce(function (a, b) {
-                    return a + _this._itemToHTML(b, depth + 1);
-                }, '') + '\n                </div>\n            </div>';
+            var result;
+            var mItem = document.createElement(link ? 'a' : 'div');
+            mItem.textContent = text;
+            if (link) {
+                mItem.setAttribute('href', link);
+                mItem.setAttribute('title', title ? title : text);
+                mItem.setAttribute('follow', follow ? 'follow' : 'nofollow');
             }
-            return resultHTML;
+            if (callback) mItem.addEventListener('click', callback.bind({ title: title, text: text, link: link, follow: follow, depth: depth }));
+
+            if (items.length === 0) {
+                mItem.setAttribute('class', 'mSidebar-item mSidebar--d' + depth);
+                result = mItem;
+            } else {
+                if (link) mItem.setAttribute('class', 'mSidebar-collapse-header mSidebar--d' + depth);else mItem.setAttribute('class', 'mSidebar-collapse-header mSidebar--d' + depth + ' mSidebar-collapse--buttonrole');
+                var linkHTML = link ? '<a href="' + link + '" title="' + (title ? title : text) + '"' + (follow ? '' : ' rel="nofollow"') + ' class="mSidebar-collapse-header mSidebar--d' + depth + '">' + text + '</a>' : '<div class="mSidebar-collapse-header mSidebar--d' + depth + ' mSidebar-collapse--buttonrole">' + text + '</div>';
+                result = document.createElement('div');
+                result.setAttribute('class', 'mSidebar-collapse mSidebar--d' + depth);
+                result.innerHTML = '\n            <div class="mSidebar-collapse-button mSidebar--d' + depth + '"></div>\n\n            <div class="mSidebar-collapse-items mSidebar--d' + (depth + 1) + '">\n            </div>';
+                result.insertBefore(mItem, result.querySelector('.mSidebar-collapse-items'));
+                items.forEach(function (item) {
+                    result.querySelector('.mSidebar-collapse-items').appendChild(this._itemToHTML(item, depth + 1));
+                }.bind(this));
+            }
+
+            return result;
         }
     }, {
         key: 'refreshItems',
         value: function refreshItems() {
-            var itemsHTML = '';
+            this.target.querySelector('.mSidebar-content').innerHTML = "";
             for (var i in this.items) {
-                itemsHTML += this._itemToHTML(this.items[i]);
+                this.target.querySelector('.mSidebar-content').appendChild(this._itemToHTML(this.items[i]));
             }
-            this.target.querySelector('.mSidebar-content').innerHTML = itemsHTML;
             return this;
         }
     }, {
@@ -83,6 +97,7 @@ var mSidebar = function () {
                     title: foundItems[i].getAttribute('title') ? foundItems[i].getAttribute('title') : this.options.defaultTitle,
                     text: foundItems[i].innerHTML.replace(/<[^>]+>/g, ''),
                     link: foundItems[i].getAttribute('href') ? foundItems[i].getAttribute('href') : '/',
+                    callback: foundItems[i].getAttribute('onClick') ? foundItems[i].getAttribute('onClick') : null,
                     follow: foundItems[i].getAttribute('rel') === 'nofollow' ? false : this.options.defaultFollow
                 }, false);
             }
@@ -95,6 +110,8 @@ var mSidebar = function () {
             var title = _ref2.title;
             var text = _ref2.text;
             var link = _ref2.link;
+            var _ref2$callback = _ref2.callback;
+            var callback = _ref2$callback === undefined ? null : _ref2$callback;
             var _ref2$follow = _ref2.follow;
             var follow = _ref2$follow === undefined ? true : _ref2$follow;
             var _ref2$items = _ref2.items;
@@ -118,6 +135,7 @@ var mSidebar = function () {
                 title: title,
                 text: text,
                 link: link,
+                callback: callback,
                 follow: follow,
                 items: items
             };
@@ -137,7 +155,7 @@ var mSidebar = function () {
             position: 'left', // left, top, bottom, right
             closeButton: true,
             closeOnBackgroundClick: true,
-            animationType: 'css', // todo jquery, tweenMax, css, none
+            animationType: 'slide',
             defaultTitle: '',
             defaultFollow: true,
             onOpen: null,
@@ -163,7 +181,7 @@ var mSidebar = function () {
 
         var newBar = document.createElement('aside');
         this.target = newBar;
-        newBar.className += ' mSidebar mSidebar--' + this.options.position;
+        newBar.className += ' mSidebar mSidebar--' + this.options.animationType + ' mSidebar--' + this.options.position;
         newBar.innerHTML = '<div class="mSidebar-container">\n            <header>\n                ' + (this.options.closeButton ? '<div class="mSidebar-close"></div>' : '') + '\n                <div class="mSidebar-header"></div>\n            </header>\n            <div class="mSidebar-content"></div>\n            <footer class="mSidebar-footer"></footer>\n        </div>';
         this.refreshItems();
         document.body.appendChild(newBar);

@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <title>mkg-sidebar Demo</title>
         <script src="dist/mkg-sidebar.js" charset="utf-8"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="dist/mkg-sidebar.css" media="screen" charset="utf-8">
         <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
         <style media="screen">
@@ -15,7 +16,7 @@
     </head>
     <body>
         <div id="content">
-            <div id="menu">
+            <div id="menu" style="display:none">
                 <a href="link2" title="custom title">Created with getItemFrom()</a>
                 <a href="link3" rel="nofollow">Another One</a>
             </div>
@@ -38,11 +39,19 @@
             },
             {
                 text:'Products',
+                callback:function(){
+                    console.log('collapsed menu toggled!');
+                },
 //                link:'/Products.html',
                 items:[
                     {
                         text:'Product1',
                         link:'/prod/1',
+                        callback:function(e){
+                            //this={title,text,link,follow,depth}
+                            e.preventDefault();
+                            alert( 'this is custom callback for ' + this.text + ' Item');
+                        },
                         items:[
                         {
                             text:'Example',
@@ -63,7 +72,7 @@
                 follow:false
             }
         ]
-        var menu =  new  mSidebar('alternativeAccessToMenu',{autoCollapse:true});
+        var menu =  new  mSidebar('alternativeAccessToMenu',{position:'left', autoCollapse:true});
         menu.addItem(items);
         menu.addItemFrom('#menu a');
         menu.open();

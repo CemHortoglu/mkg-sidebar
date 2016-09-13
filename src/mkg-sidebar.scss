@@ -2,23 +2,43 @@
  * mkg-sidebar
  * https://github.com/mkg0/mkg-sidebar
  */
-@keyframes sideopen{
+@keyframes slideLeft{
   0%{transform:translateX(-90px);opacity:0;}
   100%{transform:translateX(0px);opacity:1;}
 }
-
-@keyframes sideopen2{
-  0%{opacity:0.3;}
-  100%{opacity:1;}
-}
-
-
-@keyframes sideclose{
+@keyframes slideLeft2{
   0%{transform:translateX(0px);opacity:1;}
   100%{transform:translateX(-90px);opacity:0;}
 }
-
-@keyframes sideclose2{
+@keyframes slideRight{
+  0%{transform:translateX(90px);opacity:0;}
+  100%{transform:translateX(0px);opacity:1;}
+}
+@keyframes slideRight2{
+  0%{transform:translateX(0px);opacity:1;}
+  100%{transform:translateX(90px);opacity:0;}
+}
+@keyframes slideTop{
+  0%{transform:translateY(-90px);opacity:0;}
+  100%{transform:translateY(0px);opacity:1;}
+}
+@keyframes slideTop2{
+  0%{transform:translateY(0px);opacity:1;}
+  100%{transform:translateY(-90px);opacity:0;}
+}
+@keyframes slideBottom{
+  0%{transform:translateY(90px);opacity:0;}
+  100%{transform:translateY(0px);opacity:1;}
+}
+@keyframes slideBottom2{
+  0%{transform:translateY(0px);opacity:1;}
+  100%{transform:translateY(90px);opacity:0;}
+}
+@keyframes contFadeIn{
+  0%{opacity:0.3;}
+  100%{opacity:1;}
+}
+@keyframes contFadeOut{
   0%{opacity:1;}
   100%{opacity:0;visibility: hidden;}
 }
@@ -63,35 +83,43 @@
 
 
   //states
-  &--open{animation-duration: 0.30s; animation-name:sideopen2;display: block;
-    .mSidebar-container{animation-duration: 0.30s; animation-name:sideopen;animation-delay: 300ms;opacity:0;animation-fill-mode: both}
+  &--open{display: block;
+    .mSidebar-container{}
   }
 
-  &--close{animation-duration: 0.40s;animation-duration: 0.60s; animation-name:sideclose2;display: block;animation-fill-mode: both;pointer-events: none;
-    .mSidebar-container{ animation-name:sideclose;opacity:0;animation-duration: 0.1s}
+  &--close{display: block;pointer-events: none;
+    // .mSidebar-container{ animation-name:slideLeft2;opacity:0;animation-duration: 0.1s}
   }
 
 
-  //properties
-  &--left{
-    .mSidebar-container{top:0;left:0px;width:320px;height:100%;}
-  }
-  &--right{
-    .mSidebar-container{top:0;right:0px;width:320px;height:100%;}
-  }
-  &--top{
-    .mSidebar-container{top:0;left:0;width:100%;height:auto;max-height: 100%;}
-  }
-  &--bottom{
-    .mSidebar-container{bottom:0;left:0;width:100%;height:auto;max-height: 100%;}
-  }
-  &--full{
-    .mSidebar-container{position: relative;position:static;width:100%;height: 100%;}
+  //positions
+  &--left &-container{top:0;left:0px;width:320px;height:100%;}
+  &--right &-container{top:0;right:0px;width:320px;height:100%;}
+  &--top &-container{top:0;left:0;width:100%;height:auto;max-height: 100%;}
+  &--bottom &-container{bottom:0;left:0;width:100%;height:auto;max-height: 100%;}
+  &--full &-container{position: relative;position:static;width:100%;height: 100%;}
+
+  //animations
+
+  &--slide{
+    &.mSidebar--open{animation: 300ms both contFadeIn;
+      &.mSidebar--left .mSidebar-container{animation: 300ms 250ms both slideLeft;opacity: 1;}
+      &.mSidebar--top .mSidebar-container{animation: 300ms 250ms both slideTop;opacity: 1;}
+      &.mSidebar--right .mSidebar-container{animation: 300ms 250ms both slideRight;opacity: 1;}
+      &.mSidebar--bottom .mSidebar-container{animation: 300ms 250ms both slideBottom;opacity: 1;}
+    }
+    &.mSidebar--close{animation: 400ms 100ms both contFadeOut;height: 0%;transition: height 0ms linear 500ms;
+      &.mSidebar--left .mSidebar-container{animation: 150ms both slideLeft2;}
+      &.mSidebar--top .mSidebar-container{animation: 150ms both slideTop2;}
+      &.mSidebar--right .mSidebar-container{animation: 150ms both slideRight2;}
+      &.mSidebar--bottom .mSidebar-container{animation: 150ms both slideBottom2;}
+    }
   }
 
 
   &--touch{cursor:pointer;touch-action:manipulation;}
 }
+
 
 .mSidebar{
   & &-item{} //all menu items
@@ -101,7 +129,7 @@
     & &-items{} //items area is the sub-items container of collapsable item
     & &-button{} // button area of the collapsable item
   }
-  & &--d0{} //you can compine any class with mSidebar--d{level} class
+  & &--d0{} //you can compine any class with mSidebar--d{level}
   & &--d1{}
   & &--d2{}
 }

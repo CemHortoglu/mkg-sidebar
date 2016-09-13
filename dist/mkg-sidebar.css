@@ -2,7 +2,7 @@
  * mkg-sidebar
  * https://github.com/mkg0/mkg-sidebar
  */
-@-webkit-keyframes sideopen {
+@-webkit-keyframes slideLeft {
   0% {
     -webkit-transform: translateX(-90px);
             transform: translateX(-90px);
@@ -11,7 +11,7 @@
     -webkit-transform: translateX(0px);
             transform: translateX(0px);
     opacity: 1; } }
-@keyframes sideopen {
+@keyframes slideLeft {
   0% {
     -webkit-transform: translateX(-90px);
             transform: translateX(-90px);
@@ -21,19 +21,7 @@
             transform: translateX(0px);
     opacity: 1; } }
 
-@-webkit-keyframes sideopen2 {
-  0% {
-    opacity: 0.3; }
-  100% {
-    opacity: 1; } }
-
-@keyframes sideopen2 {
-  0% {
-    opacity: 0.3; }
-  100% {
-    opacity: 1; } }
-
-@-webkit-keyframes sideclose {
+@-webkit-keyframes slideLeft2 {
   0% {
     -webkit-transform: translateX(0px);
             transform: translateX(0px);
@@ -43,7 +31,7 @@
             transform: translateX(-90px);
     opacity: 0; } }
 
-@keyframes sideclose {
+@keyframes slideLeft2 {
   0% {
     -webkit-transform: translateX(0px);
             transform: translateX(0px);
@@ -53,14 +41,146 @@
             transform: translateX(-90px);
     opacity: 0; } }
 
-@-webkit-keyframes sideclose2 {
+@-webkit-keyframes slideRight {
+  0% {
+    -webkit-transform: translateX(90px);
+            transform: translateX(90px);
+    opacity: 0; }
+  100% {
+    -webkit-transform: translateX(0px);
+            transform: translateX(0px);
+    opacity: 1; } }
+
+@keyframes slideRight {
+  0% {
+    -webkit-transform: translateX(90px);
+            transform: translateX(90px);
+    opacity: 0; }
+  100% {
+    -webkit-transform: translateX(0px);
+            transform: translateX(0px);
+    opacity: 1; } }
+
+@-webkit-keyframes slideRight2 {
+  0% {
+    -webkit-transform: translateX(0px);
+            transform: translateX(0px);
+    opacity: 1; }
+  100% {
+    -webkit-transform: translateX(90px);
+            transform: translateX(90px);
+    opacity: 0; } }
+
+@keyframes slideRight2 {
+  0% {
+    -webkit-transform: translateX(0px);
+            transform: translateX(0px);
+    opacity: 1; }
+  100% {
+    -webkit-transform: translateX(90px);
+            transform: translateX(90px);
+    opacity: 0; } }
+
+@-webkit-keyframes slideTop {
+  0% {
+    -webkit-transform: translateY(-90px);
+            transform: translateY(-90px);
+    opacity: 0; }
+  100% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+    opacity: 1; } }
+
+@keyframes slideTop {
+  0% {
+    -webkit-transform: translateY(-90px);
+            transform: translateY(-90px);
+    opacity: 0; }
+  100% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+    opacity: 1; } }
+
+@-webkit-keyframes slideTop2 {
+  0% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+    opacity: 1; }
+  100% {
+    -webkit-transform: translateY(-90px);
+            transform: translateY(-90px);
+    opacity: 0; } }
+
+@keyframes slideTop2 {
+  0% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+    opacity: 1; }
+  100% {
+    -webkit-transform: translateY(-90px);
+            transform: translateY(-90px);
+    opacity: 0; } }
+
+@-webkit-keyframes slideBottom {
+  0% {
+    -webkit-transform: translateY(90px);
+            transform: translateY(90px);
+    opacity: 0; }
+  100% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+    opacity: 1; } }
+
+@keyframes slideBottom {
+  0% {
+    -webkit-transform: translateY(90px);
+            transform: translateY(90px);
+    opacity: 0; }
+  100% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+    opacity: 1; } }
+
+@-webkit-keyframes slideBottom2 {
+  0% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+    opacity: 1; }
+  100% {
+    -webkit-transform: translateY(90px);
+            transform: translateY(90px);
+    opacity: 0; } }
+
+@keyframes slideBottom2 {
+  0% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+    opacity: 1; }
+  100% {
+    -webkit-transform: translateY(90px);
+            transform: translateY(90px);
+    opacity: 0; } }
+
+@-webkit-keyframes contFadeIn {
+  0% {
+    opacity: 0.3; }
+  100% {
+    opacity: 1; } }
+
+@keyframes contFadeIn {
+  0% {
+    opacity: 0.3; }
+  100% {
+    opacity: 1; } }
+
+@-webkit-keyframes contFadeOut {
   0% {
     opacity: 1; }
   100% {
     opacity: 0;
     visibility: hidden; } }
 
-@keyframes sideclose2 {
+@keyframes contFadeOut {
   0% {
     opacity: 1; }
   100% {
@@ -213,38 +333,10 @@
               transform: translateY(-1px) rotate(-360deg);
       opacity: 0; }
   .mSidebar--open {
-    -webkit-animation-duration: 0.30s;
-            animation-duration: 0.30s;
-    -webkit-animation-name: sideopen2;
-            animation-name: sideopen2;
     display: block; }
-    .mSidebar--open .mSidebar-container {
-      -webkit-animation-duration: 0.30s;
-              animation-duration: 0.30s;
-      -webkit-animation-name: sideopen;
-              animation-name: sideopen;
-      -webkit-animation-delay: 300ms;
-              animation-delay: 300ms;
-      opacity: 0;
-      -webkit-animation-fill-mode: both;
-              animation-fill-mode: both; }
   .mSidebar--close {
-    -webkit-animation-duration: 0.40s;
-            animation-duration: 0.40s;
-    -webkit-animation-duration: 0.60s;
-            animation-duration: 0.60s;
-    -webkit-animation-name: sideclose2;
-            animation-name: sideclose2;
     display: block;
-    -webkit-animation-fill-mode: both;
-            animation-fill-mode: both;
     pointer-events: none; }
-    .mSidebar--close .mSidebar-container {
-      -webkit-animation-name: sideclose;
-              animation-name: sideclose;
-      opacity: 0;
-      -webkit-animation-duration: 0.1s;
-              animation-duration: 0.1s; }
   .mSidebar--left .mSidebar-container {
     top: 0;
     left: 0px;
@@ -272,6 +364,43 @@
     position: static;
     width: 100%;
     height: 100%; }
+  .mSidebar--slide.mSidebar--open {
+    -webkit-animation: 300ms both contFadeIn;
+            animation: 300ms both contFadeIn; }
+    .mSidebar--slide.mSidebar--open.mSidebar--left .mSidebar-container {
+      -webkit-animation: 300ms 250ms both slideLeft;
+              animation: 300ms 250ms both slideLeft;
+      opacity: 1; }
+    .mSidebar--slide.mSidebar--open.mSidebar--top .mSidebar-container {
+      -webkit-animation: 300ms 250ms both slideTop;
+              animation: 300ms 250ms both slideTop;
+      opacity: 1; }
+    .mSidebar--slide.mSidebar--open.mSidebar--right .mSidebar-container {
+      -webkit-animation: 300ms 250ms both slideRight;
+              animation: 300ms 250ms both slideRight;
+      opacity: 1; }
+    .mSidebar--slide.mSidebar--open.mSidebar--bottom .mSidebar-container {
+      -webkit-animation: 300ms 250ms both slideBottom;
+              animation: 300ms 250ms both slideBottom;
+      opacity: 1; }
+  .mSidebar--slide.mSidebar--close {
+    -webkit-animation: 400ms 100ms both contFadeOut;
+            animation: 400ms 100ms both contFadeOut;
+    height: 0%;
+    -webkit-transition: height 0ms linear 500ms;
+    transition: height 0ms linear 500ms; }
+    .mSidebar--slide.mSidebar--close.mSidebar--left .mSidebar-container {
+      -webkit-animation: 150ms both slideLeft2;
+              animation: 150ms both slideLeft2; }
+    .mSidebar--slide.mSidebar--close.mSidebar--top .mSidebar-container {
+      -webkit-animation: 150ms both slideTop2;
+              animation: 150ms both slideTop2; }
+    .mSidebar--slide.mSidebar--close.mSidebar--right .mSidebar-container {
+      -webkit-animation: 150ms both slideRight2;
+              animation: 150ms both slideRight2; }
+    .mSidebar--slide.mSidebar--close.mSidebar--bottom .mSidebar-container {
+      -webkit-animation: 150ms both slideBottom2;
+              animation: 150ms both slideBottom2; }
   .mSidebar--touch, .mSidebar-close, .mSidebar-collapse-button {
     cursor: pointer;
     -ms-touch-action: manipulation;

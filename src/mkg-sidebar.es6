@@ -3,34 +3,50 @@
  * https://github.com/mkg0/mkg-sidebar
  */
  class mSidebar{
-    _itemToHTML({title,text,link,follow=true,items=[]},depth=0){
+    _itemToHTML({title,text,link,callback=null,follow=true,items=[]},depth=0){
         if(link && link.search(/^(https?|ftp):/) !== 0)
             link= this.options.baseURL.replace(/\/$/,'') + '/' + link.replace(/^\//,'');
-        let resultHTML='';
+        var result;
+        var mItem = document.createElement(link ? 'a' : 'div');
+        mItem.textContent = text
+        if (link) {
+            mItem.setAttribute('href',link);
+            mItem.setAttribute('title',title ? title : text);
+            mItem.setAttribute('follow', follow? 'follow' :'nofollow');
+        }
+        if (callback) mItem.addEventListener('click',callback.bind({title,text,link, follow,depth}))
+
         if (items.length === 0) {
-            resultHTML = `<a href="${link ? link : ''}" title="${title ? title : text}"${follow ? '' : ' rel="nofollow"' } class="mSidebar-item mSidebar--d${depth}">${text}</a>`;
-        }else {
+            mItem.setAttribute('class',`mSidebar-item mSidebar--d${depth}`);
+            result = mItem
+        } else {
+            if (link)
+                mItem.setAttribute('class',`mSidebar-collapse-header mSidebar--d${depth}`);
+            else
+                mItem.setAttribute('class',`mSidebar-collapse-header mSidebar--d${depth} mSidebar-collapse--buttonrole`);
             let linkHTML = link ?
             `<a href="${link}" title="${title ? title : text}"${follow ? '' : ' rel="nofollow"'} class="mSidebar-collapse-header mSidebar--d${depth}">${text}</a>` :
             `<div class="mSidebar-collapse-header mSidebar--d${depth} mSidebar-collapse--buttonrole">${text}</div>`;
+            result = document.createElement('div');
+            result.setAttribute('class',`mSidebar-collapse mSidebar--d${depth}`)
+            result.innerHTML =`
+            <div class="mSidebar-collapse-button mSidebar--d${depth}"></div>
 
-            resultHTML= `
-            <div class="mSidebar-collapse mSidebar--d${depth}">
-                <div class="mSidebar-collapse-button mSidebar--d${depth}"></div>
-                ${linkHTML}
-                <div class="mSidebar-collapse-items mSidebar--d${depth+1}">
-                    ${ items.reduce( (a,b)=> a+ this._itemToHTML(b,depth+1) , '') }
-                </div>
+            <div class="mSidebar-collapse-items mSidebar--d${depth+1}">
             </div>`;
+            result.insertBefore(mItem, result.querySelector('.mSidebar-collapse-items'))
+            items.forEach(function (item) {
+                result.querySelector('.mSidebar-collapse-items').appendChild(this._itemToHTML(item,depth+1))
+            }.bind(this))
         }
-        return resultHTML;
+
+        return result;
     }
     refreshItems(){
-        let itemsHTML='';
+        this.target.querySelector('.mSidebar-content').innerHTML=""
         for (let i in this.items) {
-            itemsHTML += this._itemToHTML(this.items[i])
+            this.target.querySelector('.mSidebar-content').appendChild(this._itemToHTML(this.items[i]));
         }
-        this.target.querySelector('.mSidebar-content').innerHTML = itemsHTML;
         return this;
     }
     setContent(context){
@@ -57,13 +73,14 @@
                 title: foundItems[i].getAttribute('title') ? foundItems[i].getAttribute('title') : this.options.defaultTitle,
                 text:foundItems[i].innerHTML.replace(/<[^>]+>/g,''),
                 link: foundItems[i].getAttribute('href') ? foundItems[i].getAttribute('href') : '/',
+                callback: foundItems[i].getAttribute('onClick') ? foundItems[i].getAttribute('onClick') : null,
                 follow: foundItems[i].getAttribute('rel') === 'nofollow' ? false: this.options.defaultFollow
             },false)
         }
         this.refreshItems();
         return this;
     }
-    addItem({title,text,link,follow=true,items=[]},refresh=true){
+    addItem({title,text,link,callback=null,follow=true,items=[]},refresh=true){
         if(arguments.length ===0) return false;
         if (typeof arguments[0] === 'string'){
             title=arguments[0];
@@ -81,6 +98,7 @@
             title:title,
             text:text,
             link:link,
+            callback:callback,
             follow:follow,
             items:items
         }
@@ -96,7 +114,7 @@
             position:'left', // left, top, bottom, right
             closeButton:true,
             closeOnBackgroundClick:true,
-            animationType:'css', // todo jquery, tweenMax, css, none
+            animationType:'slide',
             defaultTitle:'',
             defaultFollow:true,
             onOpen:null,
@@ -123,7 +141,7 @@
 
         let newBar = document.createElement('aside');
         this.target= newBar;
-        newBar.className +=` mSidebar mSidebar--${this.options.position}`;
+        newBar.className +=` mSidebar mSidebar--${this.options.animationType} mSidebar--${this.options.position}`;
         newBar.innerHTML =
         `<div class="mSidebar-container">
             <header>

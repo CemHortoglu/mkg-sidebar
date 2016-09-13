@@ -1,3 +1,19 @@
+0.2.0
+===============
+- callback property added to items
+```js
+menu.addItem({
+    text:'Product1',
+    link:'/prod/1',
+    callback:function(e){
+        //this={title,text,link,follow,depth}
+        e.preventDefault();
+    }});
+```
+- private **\_itemToHTML** method changed. now it's using createElement instead of string for bindings
+- added base structure for different pane animations
+- default animation setted to 'slide'
+
 0.1.3
 ===============
 
