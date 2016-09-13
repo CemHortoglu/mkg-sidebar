@@ -73,7 +73,7 @@
                 title: foundItems[i].getAttribute('title') ? foundItems[i].getAttribute('title') : this.options.defaultTitle,
                 text:foundItems[i].innerHTML.replace(/<[^>]+>/g,''),
                 link: foundItems[i].getAttribute('href') ? foundItems[i].getAttribute('href') : '/',
-                callback: foundItems[i].getAttribute('onClick') ? foundItems[i].getAttribute('onClick') : null,
+                callback: foundItems[i].getAttribute('onClick') ? function(data){eval(data)}.bind(this,foundItems[i].getAttribute('onClick')) : null,
                 follow: foundItems[i].getAttribute('rel') === 'nofollow' ? false: this.options.defaultFollow
             },false)
         }
